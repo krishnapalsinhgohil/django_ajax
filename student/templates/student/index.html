@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Homepage</title>
+</head>
+<body>
+
+<script>
+    function call(){
+        var csrftoken = '{{ csrf_token }}';
+        var xhttp = new XMLHttpRequest();
+        var e = document.getElementById("clglist");
+        var id = e.options[e.selectedIndex].value;
+        xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+         document.getElementById("list").innerHTML = this.responseText;
+        }
+        };
+        xhttp.open("POST", "{% url 'details' %}" , true);
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhttp.setRequestHeader("X-CSRFToken", csrftoken);
+        xhttp.send("val="+id);
+        xhttp.send();
+    }
+
+
+
+</script>
+
+<form method="POST">
+    {% csrf_token %}
+    <select id="clglist" onchange="call()">
+        <option>select college</option>
+        {% for item in clglst %}
+        <option value={{item.id}}>{{item.college_name}}</option>
+        {% endfor %}
+    </select>
+
+    <div id="list">
+
+    </div>
+</form>
+
+
+</body>
+</html>
